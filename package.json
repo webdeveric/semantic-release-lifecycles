@@ -1,0 +1,77 @@
+{
+  "name": "@webdeveric/dual-ts-package-template",
+  "description": "",
+  "version": "0.0.0",
+  "keywords": [],
+  "author": "Eric King <eric@webdeveric.com> (https://webdeveric.com/)",
+  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webdeveric/dual-ts-package-template.git"
+  },
+  "bugs": {
+    "url": "https://github.com/webdeveric/dual-ts-package-template/issues"
+  },
+  "license": "MIT",
+  "packageManager": "pnpm@9.6.0+sha256.dae0f7e822c56b20979bb5965e3b73b8bdabb6b8b8ef121da6d857508599ca35",
+  "sideEffects": false,
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "type": "module",
+  "main": "./dist/mjs/index.js",
+  "types": "./dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/mjs/index.js"
+    },
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "require": "./dist/cjs/*.js",
+      "import": "./dist/mjs/*.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf ./dist/",
+    "prebuild": "pnpm clean",
+    "build": "tsc --build tsconfig.cjs.json tsconfig.mjs.json --force",
+    "validate": "validate-package-exports --check --verify --info",
+    "postbuild": "echo '{\"type\":\"commonjs\"}' > ./dist/cjs/package.json && echo '{\"type\":\"module\"}' > ./dist/mjs/package.json && pnpm validate",
+    "typecheck": "tsc --build --verbose",
+    "lint": "eslint ./*.{js,cjs,mjs,ts,cts,mts} ./src/ ./test/ --ext .ts,.mjs,.cjs",
+    "test": "vitest",
+    "coverage": "vitest run  -c vitest.config.mts --coverage",
+    "spellcheck": "cspell './{.github,src,test}/**/*.{ts,json}' './*.{js,json,md,mjs,mts}' './package.json' --no-progress",
+    "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage && pnpm build",
+    "format": "prettier --write ./*.{js,json,md,mjs,mts} ./src/ ./test/",
+    "prepare": "husky"
+  },
+  "prettier": "@webdeveric/prettier-config",
+  "devDependencies": {
+    "@types/node": "^20.14.15",
+    "@vitest/coverage-v8": "^2.0.5",
+    "@webdeveric/eslint-config-ts": "^0.9.0",
+    "@webdeveric/prettier-config": "^0.3.0",
+    "cspell": "^8.13.2",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "husky": "^9.1.4",
+    "lint-staged": "^15.2.8",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4",
+    "validate-package-exports": "^0.6.0",
+    "vitest": "^2.0.5"
+  }
+}
