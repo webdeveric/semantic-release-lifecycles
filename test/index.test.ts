@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { demo } from '../src/index.js';
+import plugin from '../src/index.js';
+import { getLifecycleNames } from '../src/plugin.js';
 
-describe('demo()', () => {
-  it('Does a thing', () => {
-    expect(demo()).toBeTruthy();
+describe('Plugin', () => {
+  it('Has lifecycle methods', () => {
+    expect(Object.entries(plugin)).toEqual(
+      getLifecycleNames().map((lifecycle) => [expect.stringMatching(lifecycle), expect.any(Function)]),
+    );
   });
 });
