@@ -22,30 +22,18 @@
     "node": ">=20.0.0"
   },
   "type": "module",
-  "main": "./dist/mjs/index.js",
-  "types": "./dist/types/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/mjs/index.js"
-    },
-    "./*": {
-      "types": "./dist/types/*.d.ts",
-      "require": "./dist/cjs/*.js",
-      "import": "./dist/mjs/*.js"
-    },
-    "./package.json": "./package.json"
-  },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": "./dist/index.js",
   "files": [
     "dist"
   ],
   "scripts": {
     "clean": "rimraf ./dist/",
     "prebuild": "pnpm clean",
-    "build": "tsc --build tsconfig.cjs.json tsconfig.mjs.json --force",
+    "build": "tsc --build tsconfig.mjs.json --force",
     "validate": "validate-package-exports --check --verify --info",
-    "postbuild": "echo '{\"type\":\"commonjs\"}' > ./dist/cjs/package.json && echo '{\"type\":\"module\"}' > ./dist/mjs/package.json && pnpm validate",
+    "postbuild": "pnpm validate",
     "typecheck": "tsc --build --verbose",
     "lint": "eslint ./*.{js,cjs,mjs,ts,cts,mts} ./src/ ./test/ --ext .ts,.mjs,.cjs",
     "test": "vitest",
@@ -65,7 +53,7 @@
     "@webdeveric/prettier-config": "^0.3.0",
     "commitlint": "^19.4.0",
     "commitlint-plugin-cspell": "^0.1.1",
-    "cspell": "^8.13.2",
+    "cspell": "^8.13.3",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -77,7 +65,7 @@
     "rimraf": "^6.0.1",
     "semantic-release": "^24.0.0",
     "typescript": "^5.5.4",
-    "validate-package-exports": "^0.6.0",
+    "validate-package-exports": "^0.6.1",
     "vitest": "^2.0.5"
   }
 }
