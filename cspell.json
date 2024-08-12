@@ -4,6 +4,7 @@
   "words": [
     "CODEOWNERS",
     "commitlint",
+    "conventionalcommits",
     "lifecycles",
     "memfs",
     "nvmrc",
