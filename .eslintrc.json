@@ -31,7 +31,7 @@
     "import/no-extraneous-dependencies": [
       "error",
       {
-        "devDependencies": ["./vitest.config.mts", "./lint-staged.config.mjs", "./test/**/*"]
+        "devDependencies": ["__mocks__/**/*", "./vitest.config.mts", "./lint-staged.config.mjs", "./test/**/*"]
       }
     ],
     "import/no-relative-packages": "error",
