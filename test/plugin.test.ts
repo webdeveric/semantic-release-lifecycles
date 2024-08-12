@@ -5,7 +5,7 @@ import { PassThrough } from 'node:stream';
 import { fs, vol } from 'memfs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { getInstance, getLifecycleNames, makeLifecycleFn } from '../src/plugin.js';
+import { getLifecycleNames, makeLifecycleFn } from '../src/plugin.js';
 
 import type { PluginContext } from '../src/types.js';
 
@@ -65,11 +65,5 @@ describe('makeLifecycleFn()', () => {
     await expect(fs.promises.readFile('success.json', 'utf-8')).resolves.toEqual(
       expect.stringContaining('pluginConfig'),
     );
-  });
-});
-
-describe('getInstance()', () => {
-  it('Returns an object', () => {
-    expect(getInstance()).toBeInstanceOf(Object);
   });
 });
