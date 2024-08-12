@@ -29,11 +29,12 @@ export function makeLifecycleFn(name: LifecycleName): LifecycleFn {
       const { dryRun, enabled = getLifecycleNames() } = pluginConfig;
 
       if (enabled.includes(name)) {
-        const { logger } = context;
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const { logger, env, stderr, stdout, ...contextData } = context;
 
         const outputFile = pluginConfig[`${name}OutputFile`] ?? `.semantic-release.${name}.json`;
 
-        const contents = JSON.stringify({ pluginConfig, context }, null, 2);
+        const contents = JSON.stringify({ pluginConfig, context: contextData }, null, 2);
 
         logger.info(dryRun ? `${name} data: ${contents}` : `Writing ${name} details to ${outputFile}`);
 
