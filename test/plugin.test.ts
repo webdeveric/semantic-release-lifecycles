@@ -27,8 +27,8 @@ describe('makeLifecycleFn()', () => {
         stderr: new PassThrough(),
       }),
       env: {},
-      stdout: createWriteStream('stdout'),
-      stderr: createWriteStream('stderr'),
+      stdout: createWriteStream('stdout', { fs }),
+      stderr: createWriteStream('stderr', { fs }),
     };
     vol.reset();
 
