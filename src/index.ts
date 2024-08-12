@@ -1,3 +1,3 @@
-export function demo(): boolean {
-  return true;
-}
+import { getInstance } from './plugin.js';
+
+export default getInstance();
