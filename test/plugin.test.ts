@@ -1,10 +1,13 @@
 import { Console } from 'node:console';
+import { createWriteStream } from 'node:fs';
 import { PassThrough } from 'node:stream';
 
 import { fs, vol } from 'memfs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { getInstance, getLifecycleNames, makeLifecycleFn } from '../src/plugin.js';
+
+import type { PluginContext } from '../src/types.js';
 
 vi.mock('node:fs/promises');
 
@@ -15,7 +18,18 @@ describe('getLifecycleNames()', () => {
 });
 
 describe('makeLifecycleFn()', () => {
+  let context: PluginContext;
+
   beforeEach(() => {
+    context = {
+      logger: new Console({
+        stdout: new PassThrough(),
+        stderr: new PassThrough(),
+      }),
+      env: {},
+      stdout: createWriteStream('stdout'),
+      stderr: createWriteStream('stderr'),
+    };
     vol.reset();
 
     vol.mkdirSync(process.cwd(), { recursive: true });
@@ -28,14 +42,9 @@ describe('makeLifecycleFn()', () => {
   it('Logs data to when during dry run', async () => {
     const fn = makeLifecycleFn('success');
 
-    const logger = new Console({
-      stdout: new PassThrough(),
-      stderr: new PassThrough(),
-    });
+    const infoSpy = vi.spyOn(context.logger, 'info');
 
-    const infoSpy = vi.spyOn(logger, 'info');
-
-    await expect(fn({ dryRun: true, repositoryUrl: '' }, { logger })).resolves.toBeUndefined();
+    await expect(fn({ dryRun: true, repositoryUrl: '' }, context)).resolves.toBeUndefined();
 
     await expect(fs.promises.readFile('.semantic-release.success.json')).rejects.toThrow('ENOENT');
 
@@ -45,20 +54,10 @@ describe('makeLifecycleFn()', () => {
   it('Writes a JSON file', async () => {
     const fn = makeLifecycleFn('success');
 
-    const logger = new Console({
-      stdout: new PassThrough(),
-      stderr: new PassThrough(),
-    });
-
-    const infoSpy = vi.spyOn(logger, 'info');
+    const infoSpy = vi.spyOn(context.logger, 'info');
 
     await expect(
-      fn(
-        { dryRun: false, repositoryUrl: '', successOutputFile: 'success.json' },
-        {
-          logger,
-        },
-      ),
+      fn({ dryRun: false, repositoryUrl: '', successOutputFile: 'success.json' }, context),
     ).resolves.toBeUndefined();
 
     expect(infoSpy).toHaveBeenCalled();

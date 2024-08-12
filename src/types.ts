@@ -1,3 +1,5 @@
+import type { WriteStream } from 'node:fs';
+
 export type LifecycleFn = (pluginConfig: PluginConfig, context: PluginContext) => Promise<void>;
 
 export type LifecycleName =
@@ -25,6 +27,9 @@ export type PluginConfig = {
 
 export type PluginContext = {
   logger: Console;
+  env: Record<string, string>;
+  stdout: WriteStream;
+  stderr: WriteStream;
   [property: string]: unknown;
 };
 
