@@ -26,18 +26,20 @@ export function makeLifecycleFn(name: LifecycleName): LifecycleFn {
 
   return {
     async [fnName](pluginConfig: PluginConfig, context: PluginContext): Promise<void> {
-      const { dryRun } = pluginConfig;
+      const { dryRun, enabled = getLifecycleNames() } = pluginConfig;
 
-      const { logger } = context;
+      if (enabled.includes(name)) {
+        const { logger } = context;
 
-      const outputFile = pluginConfig[`${name}OutputFile`] ?? `.semantic-release.${name}.json`;
+        const outputFile = pluginConfig[`${name}OutputFile`] ?? `.semantic-release.${name}.json`;
 
-      const contents = JSON.stringify({ pluginConfig, context }, null, 2);
+        const contents = JSON.stringify({ pluginConfig, context }, null, 2);
 
-      logger.info(dryRun ? `${name} data: ${contents}` : `Writing ${name} details to ${outputFile}`);
+        logger.info(dryRun ? `${name} data: ${contents}` : `Writing ${name} details to ${outputFile}`);
 
-      if (!dryRun) {
-        await writeFile(outputFile, contents);
+        if (!dryRun) {
+          await writeFile(outputFile, contents);
+        }
       }
     },
   }[fnName];
