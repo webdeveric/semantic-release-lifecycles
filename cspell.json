@@ -5,6 +5,7 @@
     "CODEOWNERS",
     "commitlint",
     "lifecycles",
+    "memfs",
     "nvmrc",
     "OIDC",
     "postbuild",
