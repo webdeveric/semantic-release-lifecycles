@@ -1,5 +1,5 @@
 {
-  "name": "@webdeveric/dual-ts-package-template",
+  "name": "semantic-release-lifecycles",
   "description": "",
   "version": "0.0.0",
   "keywords": [],
@@ -10,30 +10,28 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/webdeveric/dual-ts-package-template.git"
+    "url": "git+https://github.com/webdeveric/semantic-release-lifecycles.git"
   },
   "bugs": {
-    "url": "https://github.com/webdeveric/dual-ts-package-template/issues"
+    "url": "https://github.com/webdeveric/semantic-release-lifecycles/issues"
   },
   "license": "MIT",
-  "packageManager": "pnpm@9.6.0+sha256.dae0f7e822c56b20979bb5965e3b73b8bdabb6b8b8ef121da6d857508599ca35",
+  "packageManager": "pnpm@9.7.0+sha512.dc09430156b427f5ecfc79888899e1c39d2d690f004be70e05230b72cb173d96839587545d09429b55ac3c429c801b4dc3c0e002f653830a420fa2dd4e3cf9cf",
   "sideEffects": false,
   "engines": {
     "node": ">=20.0.0"
   },
   "type": "module",
-  "main": "./dist/mjs/index.js",
-  "types": "./dist/types/index.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/types/index.d.ts",
-      "require": "./dist/cjs/index.js",
-      "import": "./dist/mjs/index.js"
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
     },
     "./*": {
-      "types": "./dist/types/*.d.ts",
-      "require": "./dist/cjs/*.js",
-      "import": "./dist/mjs/*.js"
+      "types": "./dist/*.d.ts",
+      "import": "./dist/*.js"
     },
     "./package.json": "./package.json"
   },
@@ -43,13 +41,13 @@
   "scripts": {
     "clean": "rimraf ./dist/",
     "prebuild": "pnpm clean",
-    "build": "tsc --build tsconfig.cjs.json tsconfig.mjs.json --force",
     "validate": "validate-package-exports --check --verify --info",
-    "postbuild": "echo '{\"type\":\"commonjs\"}' > ./dist/cjs/package.json && echo '{\"type\":\"module\"}' > ./dist/mjs/package.json && pnpm validate",
+    "build": "tsc --build tsconfig.mjs.json --force",
+    "postbuild": "pnpm validate",
     "typecheck": "tsc --build --verbose",
     "lint": "eslint ./*.{js,cjs,mjs,ts,cts,mts} ./src/ ./test/ --ext .ts,.mjs,.cjs",
     "test": "vitest",
-    "coverage": "vitest run  -c vitest.config.mts --coverage",
+    "coverage": "vitest run --coverage",
     "spellcheck": "cspell './{.github,src,test}/**/*.{ts,json}' './*.{js,json,md,mjs,mts}' './package.json' --no-progress",
     "prepublishOnly": "pnpm typecheck && pnpm spellcheck && pnpm lint && pnpm coverage && pnpm build",
     "format": "prettier --write ./*.{js,json,md,mjs,mts} ./src/ ./test/",
@@ -57,10 +55,14 @@
   },
   "prettier": "@webdeveric/prettier-config",
   "devDependencies": {
+    "@commitlint/config-conventional": "^19.2.2",
+    "@commitlint/types": "^19.0.3",
     "@types/node": "^20.14.15",
     "@vitest/coverage-v8": "^2.0.5",
     "@webdeveric/eslint-config-ts": "^0.9.0",
     "@webdeveric/prettier-config": "^0.3.0",
+    "commitlint": "^19.4.0",
+    "commitlint-plugin-cspell": "^0.1.1",
     "cspell": "^8.13.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
@@ -70,6 +72,7 @@
     "lint-staged": "^15.2.8",
     "prettier": "^3.3.3",
     "rimraf": "^6.0.1",
+    "semantic-release": "^24.0.0",
     "typescript": "^5.5.4",
     "validate-package-exports": "^0.6.0",
     "vitest": "^2.0.5"
