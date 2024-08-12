@@ -1,13 +1,48 @@
-# `dual-ts-package-template`
+# `semantic-release-lifecycles`
 
-[![Node.js CI](https://github.com/webdeveric/dual-ts-package-template/actions/workflows/node.js.yml/badge.svg)](https://github.com/webdeveric/dual-ts-package-template/actions/workflows/node.js.yml)
+[![Node.js CI](https://github.com/webdeveric/semantic-release-lifecycles/actions/workflows/node.js.yml/badge.svg)](https://github.com/webdeveric/semantic-release-lifecycles/actions/workflows/node.js.yml)
+
+## Install
+
+```sh
+pnpm add semantic-release-lifecycles -D
+```
 
 ## Usage
 
-Click the "Use this template" button on this page and select "Create a new repository."
+Add this plugin to your `release.config.mjs`.
 
-### GitHub CLI
+```js
+/**
+ * @type {Partial<import('semantic-release').GlobalConfig>}
+ */
+export default {
+  branches: ['main'],
+  plugins: ['semantic-release-lifecycles'],
+};
+```
 
-Reference: https://cli.github.com/manual/gh_repo_create
+### Options
 
-`gh repo create [YOUR-REPO-NAME] --template webdeveric/dual-ts-package-template --private`
+All options are optional.
+
+```js
+/**
+ * @type {Partial<import('semantic-release').GlobalConfig>}
+ */
+export default {
+  branches: ['main'],
+  plugins: [
+    [
+      'semantic-release-lifecycles',
+      {
+        // Pass in lifecycle names you want to enable. Look at `types.ts` for full list.
+        enabled: ['success', 'fail'],
+        // Customize where each lifecycle file is written.
+        // The naming convention is `${LifecycleName}OutputFile`.
+        successOutputFile: 'success.json',
+      },
+    ],
+  ],
+};
+```
