@@ -22,16 +22,18 @@
     "node": ">=20.0.0"
   },
   "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/mjs/index.js",
+  "types": "./dist/types/index.d.ts",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/mjs/index.js"
     },
     "./*": {
-      "types": "./dist/*.d.ts",
-      "import": "./dist/*.js"
+      "types": "./dist/types/*.d.ts",
+      "require": "./dist/cjs/*.js",
+      "import": "./dist/mjs/*.js"
     },
     "./package.json": "./package.json"
   },
@@ -41,9 +43,9 @@
   "scripts": {
     "clean": "rimraf ./dist/",
     "prebuild": "pnpm clean",
+    "build": "tsc --build tsconfig.cjs.json tsconfig.mjs.json --force",
     "validate": "validate-package-exports --check --verify --info",
-    "build": "tsc --build tsconfig.mjs.json --force",
-    "postbuild": "pnpm validate",
+    "postbuild": "echo '{\"type\":\"commonjs\"}' > ./dist/cjs/package.json && echo '{\"type\":\"module\"}' > ./dist/mjs/package.json && pnpm validate",
     "typecheck": "tsc --build --verbose",
     "lint": "eslint ./*.{js,cjs,mjs,ts,cts,mts} ./src/ ./test/ --ext .ts,.mjs,.cjs",
     "test": "vitest",
