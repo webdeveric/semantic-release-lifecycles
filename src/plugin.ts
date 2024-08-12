@@ -1,11 +1,12 @@
-/**
- * @see https://semantic-release.gitbook.io/semantic-release/developer-guide/plugin
- */
-
 import { writeFile } from 'node:fs/promises';
 
-import type { LifecycleName, LifecycleFn, PluginConfig, PluginContext, SemanticReleasePlugin } from './types.js';
+import type { LifecycleName, LifecycleFn, PluginConfig, PluginContext } from './types.js';
 
+/**
+ * Return supported lifecycles
+ *
+ * @see https://semantic-release.gitbook.io/semantic-release/developer-guide/plugin
+ */
 export const getLifecycleNames = (): LifecycleName[] => [
   'verifyConditions',
   'analyzeCommits',
@@ -22,10 +23,8 @@ export const getLifecycleNames = (): LifecycleName[] => [
  * Create a named function
  */
 export function makeLifecycleFn(name: LifecycleName): LifecycleFn {
-  const fnName = `${name}Lifecycle`;
-
   return {
-    async [fnName](pluginConfig: PluginConfig, context: PluginContext): Promise<void> {
+    async [name](pluginConfig: PluginConfig, context: PluginContext): Promise<void> {
       const { dryRun, enabled = getLifecycleNames() } = pluginConfig;
 
       if (enabled.includes(name)) {
@@ -43,13 +42,5 @@ export function makeLifecycleFn(name: LifecycleName): LifecycleFn {
         }
       }
     },
-  }[fnName];
-}
-
-export function getInstance(): SemanticReleasePlugin {
-  return getLifecycleNames().reduce<SemanticReleasePlugin>((instance, name) => {
-    instance[name] = makeLifecycleFn(name);
-
-    return instance;
-  }, {});
+  }[name];
 }
