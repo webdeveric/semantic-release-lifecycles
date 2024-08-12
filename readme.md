@@ -2,6 +2,8 @@
 
 [![Node.js CI](https://github.com/webdeveric/semantic-release-lifecycles/actions/workflows/node.js.yml/badge.svg)](https://github.com/webdeveric/semantic-release-lifecycles/actions/workflows/node.js.yml)
 
+This plugin for `semantic-release` will log lifecycle data to JSON files so you can see what data is available at each step.
+
 ## Install
 
 ```sh
