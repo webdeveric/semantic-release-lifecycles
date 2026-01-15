@@ -44,6 +44,9 @@
     "prepare": "husky"
   },
   "prettier": "@webdeveric/prettier-config",
+  "peerDependencies": {
+    "semantic-release": ">=24"
+  },
   "devDependencies": {
     "@commitlint/config-conventional": "^20.3.1",
     "@commitlint/types": "^20.3.1",
