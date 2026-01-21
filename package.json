@@ -50,7 +50,7 @@
   "devDependencies": {
     "@commitlint/config-conventional": "^20.3.1",
     "@commitlint/types": "^20.3.1",
-    "@types/node": "^24.10.8",
+    "@types/node": "^24.10.9",
     "@vitest/coverage-v8": "^4.0.17",
     "@webdeveric/eslint-config-ts": "^0.11.0",
     "@webdeveric/prettier-config": "^0.3.0",
@@ -64,7 +64,7 @@
     "eslint-plugin-import": "^2.32.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "memfs": "^4.52.0",
+    "memfs": "^4.56.4",
     "prettier": "^3.8.0",
     "rimraf": "^6.1.2",
     "semantic-release": "^25.0.2",
