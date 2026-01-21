@@ -66,4 +66,12 @@ describe('makeLifecycleFn()', () => {
       expect.stringContaining('pluginConfig'),
     );
   });
+
+  it('Does not write a file when not enabled', async () => {
+    const fn = makeLifecycleFn('fail');
+
+    await expect(fn({ dryRun: true, repositoryUrl: '', enabled: ['success'] }, context)).resolves.toBeUndefined();
+
+    await expect(fs.promises.readFile('.semantic-release.fail.json')).rejects.toThrow('ENOENT');
+  });
 });
