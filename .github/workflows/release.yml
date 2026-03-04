@@ -62,7 +62,24 @@ jobs:
           echo "=== home .npmrc ===" && cat ~/.npmrc 2>/dev/null || echo "none"
           echo "=== pnpm config ===" && pnpm config list
 
+      - name: Check npm publish env
+        run: |
+          echo "=== which npm ===" && which npm
+          echo "=== npm version ===" && npm --version
+          echo "=== which pnpm ===" && which pnpm
+          echo "=== node version ===" && node --version
+          echo "=== ACTIONS_ID_TOKEN_REQUEST_URL set ==="
+          [ -n "$ACTIONS_ID_TOKEN_REQUEST_URL" ] && echo "yes" || echo "NO - THIS IS THE PROBLEM"
+        env:
+          ACTIONS_ID_TOKEN_REQUEST_URL: ${{ env.ACTIONS_ID_TOKEN_REQUEST_URL }}
+
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm exec semantic-release --debug
+        run: |
+          pnpm exec semantic-release --debug 2>&1 | tee /tmp/sr-debug.log
+          echo "=== .npmrc after release ==="
+          cat ~/.npmrc 2>/dev/null || echo "none"
+          cat .npmrc 2>/dev/null || echo "none"
+          echo "=== sr debug log (npm publish lines) ==="
+          grep -i "npm\|npmrc\|auth\|provenance\|publish" /tmp/sr-debug.log
