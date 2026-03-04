@@ -45,18 +45,24 @@ jobs:
       # - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
       #   run: npm audit signatures
 
-      - name: Debug OIDC
+      # - name: Debug OIDC
+      #   run: |
+      #     TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+      #       "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=npm" | jq -r '.value')
+      #     echo "Token present: $([ -n "$TOKEN" ] && echo yes || echo no)"
+      #     # Decode the payload (middle part of JWT) without verifying signature
+      #     echo $TOKEN | cut -d. -f2 | base64 -d 2>/dev/null | jq .
+      #   env:
+      #     ACTIONS_ID_TOKEN_REQUEST_TOKEN: ${{ env.ACTIONS_ID_TOKEN_REQUEST_TOKEN }}
+      #     ACTIONS_ID_TOKEN_REQUEST_URL: ${{ env.ACTIONS_ID_TOKEN_REQUEST_URL }}
+
+      - name: Show npmrc files
         run: |
-          TOKEN=$(curl -sS -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
-            "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=npm" | jq -r '.value')
-          echo "Token present: $([ -n "$TOKEN" ] && echo yes || echo no)"
-          # Decode the payload (middle part of JWT) without verifying signature
-          echo $TOKEN | cut -d. -f2 | base64 -d 2>/dev/null | jq .
-        env:
-          ACTIONS_ID_TOKEN_REQUEST_TOKEN: ${{ env.ACTIONS_ID_TOKEN_REQUEST_TOKEN }}
-          ACTIONS_ID_TOKEN_REQUEST_URL: ${{ env.ACTIONS_ID_TOKEN_REQUEST_URL }}
+          echo "=== project .npmrc ===" && cat .npmrc 2>/dev/null || echo "none"
+          echo "=== home .npmrc ===" && cat ~/.npmrc 2>/dev/null || echo "none"
+          echo "=== pnpm config ===" && pnpm config list
 
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: pnpm exec semantic-release
+        run: pnpm exec semantic-release --debug
