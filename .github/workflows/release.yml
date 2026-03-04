@@ -66,8 +66,18 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm exec semantic-release --debug 2>&1 | tee /tmp/sr-debug.log || true
-          echo "=== npmrc written by semantic-release ==="
-          grep -i "npmrc\|_authToken\|provenance\|publish command\|npm publish" /tmp/sr-debug.log
-          echo "=== full error context ==="
-          grep -A 10 -B 5 "ENEEDAUTH\|need auth\|401" /tmp/sr-debug.log
+          # Intercept npm to dump the userconfig before publishing
+          cat > /tmp/npm-spy.sh << 'EOF'
+          #!/bin/bash
+          for arg in "$@"; do
+            if [[ "$arg" == /tmp/*.npmrc ]]; then
+              echo "=== intercepted npmrc: $arg ===" >&2
+              cat "$arg" >&2
+            fi
+          done
+          exec /opt/hostedtoolcache/node/22.22.0/x64/bin/npm "$@"
+          EOF
+          chmod +x /tmp/npm-spy.sh
+          export PATH="/tmp:$PATH"
+          ln -s /tmp/npm-spy.sh /tmp/npm
+          pnpm exec semantic-release --debug 2>&1 | grep -A 20 "intercepted npmrc\|provenance\|ENEEDAUTH"
