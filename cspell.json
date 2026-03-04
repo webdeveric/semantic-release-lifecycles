@@ -5,6 +5,7 @@
     "CODEOWNERS",
     "commitlint",
     "conventionalcommits",
+    "ENEEDAUTH",
     "lifecycles",
     "memfs",
     "nvmrc",
