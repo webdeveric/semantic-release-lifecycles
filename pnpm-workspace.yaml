@@ -1,6 +1,8 @@
+allowBuilds:
+  unrs-resolver: true
+
 autoInstallPeers: true
-enablePrePostScripts: true
+
+enablePrePostScripts: false
+
 engineStrict: true
-onlyBuiltDependencies:
-  - esbuild
-  - unrs-resolver
